@@ -24,18 +24,19 @@ having count(distinct artist);
 CREATE OR REPLACE VIEW top_artista_por_genero AS
 SELECT t.genre genero,               -- género musical
        t.artist artista,             -- nombre del artista
-       t.listeners_num oyentes       -- número de oyentes normalizado
-FROM last_fm_clean t                 -- tabla base normalizada
+       t.listeners oyentes       -- número de oyentes normalizado
+FROM last_fm t                 -- tabla base normalizada
 INNER JOIN (
     SELECT genre genero,             -- género musical
-           MAX(listeners_num) max_oyentes -- máximo de oyentes por género
-    FROM last_fm_clean
+           MAX(listeners) max_oyentes -- máximo de oyentes por género
+    FROM last_fm
     GROUP BY genre                   -- agrupación por género
 ) m
   ON t.genre = m.genero              -- empareja género actual con el máximo
- AND t.listeners_num = m.max_oyentes; -- empareja oyentes con el valor máximo
+ AND t.listeners = m.max_oyentes; -- empareja oyentes con el valor máximo
 
-SELECT * FROM top_artista_por_genero; -- muestra los artistas más escuchados por género
+SELECT * FROM top_artista_por_genero
+order by oyentes desc; -- muestra los artistas más escuchados por género
 
 -- Número de álbumes por género y año
 CREATE OR REPLACE VIEW albums_por_genero_anio AS
@@ -65,20 +66,21 @@ SELECT * FROM album_mas_popular_por_anio; -- muestra los álbumes más populares
 CREATE OR REPLACE VIEW cancion_mas_popular_por_artista AS
 SELECT s.artist artista,             -- nombre del artista
        s.track cancion,              -- título de la canción
-       s.popularity popularidad      -- popularidad de la canción
+       s.popularity popularidad,      -- popularidad de la canción
+       s.genre género  -- Samai: añado género para contrastar
 FROM spotipy s
 WHERE s.popularity = (
     SELECT MAX(s2.popularity)        -- máximo de popularidad
     FROM spotipy s2
-    WHERE s2.artist = s.artist       -- dentro del mismo artista
-);
-
+    WHERE s2.artist = s.artist)      -- dentro del mismo artista;
+	order by popularidad desc;  -- Samai: añado el order by desc para ver de más a menos ese índice de popularidad
+    
 SELECT * FROM cancion_mas_popular_por_artista; -- muestra la canción más popular por artista
 
 -- ¿Cuáles son los artistas con mayor popularidad media y al menos 3 años de presencia?
 CREATE OR REPLACE VIEW artistas_populares_consistentes AS
 SELECT artist artista,               -- nombre del artista
-       COUNT(DISTINCT release_year) anios_con_datos, -- número de años distintos
+       COUNT(DISTINCT release_year) anios_de_presencia, -- número de años distintos
        AVG(popularity) popularidad_media -- media de popularidad
 FROM spotipy
 GROUP BY artist
@@ -86,6 +88,22 @@ HAVING COUNT(DISTINCT release_year) >= 3 -- exige mínimo 3 años con datos
 ORDER BY popularidad_media DESC;     -- ordena por media descendente
 
 SELECT * FROM artistas_populares_consistentes; -- muestra artistas consistentes
+
+-- Samai: Renombro, añado el Género y le pongo un limit 5 para que me de el top 5
+
+CREATE OR REPLACE VIEW artistas_populares_consistentes AS
+SELECT 
+    genre AS Género,                          -- género musical
+    artist AS Artista,                        -- nombre del artista
+    COUNT(DISTINCT release_year) AS Años_de_Presencia, -- nº de años distintos
+    ROUND(AVG(popularity), 2) AS Popularidad_media     -- media de popularidad
+FROM spotipy
+GROUP BY genre, artist
+HAVING COUNT(DISTINCT release_year) >= 3      -- mínimo 3 años con datos
+ORDER BY Popularidad_media DESC;              -- orden por media descendente
+
+SELECT * FROM artistas_populares_consistentes
+limit 5; -- muestra artistas consistentes
 
 -- ¿Cómo evolucionó el número de oyentes de cada género entre un año y el anterior?
 CREATE OR REPLACE VIEW crecimiento_oyentes AS

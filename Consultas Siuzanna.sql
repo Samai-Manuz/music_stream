@@ -22,9 +22,10 @@ from spotipy;
 
 -- Número de oyentes por género - Last fm --
 
-SELECT genre, SUM(listeners) 
+SELECT genre as Género, SUM(listeners) as Oyentes_únicos 
 FROM last_fm 
-GROUP BY genre;
+GROUP BY genre
+order by Oyentes_únicos;
 
 -- Artistas similares con más seguidores - Last fm --
 
@@ -41,6 +42,31 @@ SELECT artist, popularity
 FROM spotipy
 ORDER BY popularity DESC
 LIMIT 1;
+
+-- Samai: necesitamos el dato máximo de popularidad por artista, así que meto distinct, max, agrupo y amplío el límite a top 5:
+SELECT distinct artist, max(popularity)
+FROM spotipy
+group by artist
+ORDER BY popularity DESC
+LIMIT 5;
+
+-- Samai: Ahora Linkin Park no aparece porque puede estar agrupado con otros artistas, así que le meto una normalización:
+-- También veo que lo suyo es hacer una media de la popularidad de todas las canciones de cada artista, porque dar el dato de popularidad de una sóla canción (por mucho que sea la más popular) es sesgar el resultado
+-- También le meto el género, que siempre nos interesa para nuestras pesquisas
+SELECT
+  genre     AS Género,
+  artist    AS Artista,
+  ROUND(AVG(pop), 2) AS Popularidad
+FROM (
+  SELECT
+    genre,
+    TRIM(LOWER(SUBSTRING_INDEX(artist, ',', 1))) AS artist,
+    CAST(popularity AS UNSIGNED)                 AS pop
+  FROM spotipy
+) t
+GROUP BY genre, artist
+ORDER BY Popularidad DESC
+LIMIT 5;
 
 -- ¿Qué artista tiene más oyentes? - Last fm --
 SELECT artist, 
@@ -78,6 +104,27 @@ FROM spotipy
 GROUP BY artist
 ORDER BY popularidad_media DESC
 LIMIT 5;
+
+-- Samai: meto género y agrupo
+
+SELECT 
+    genre AS Género,
+    artist AS Artista,
+    ROUND(AVG(popularity)) AS Popularidad_media
+FROM spotipy
+GROUP BY artist
+ORDER BY Popularidad_media DESC
+LIMIT 5;
+
+SELECT 
+    artist AS Artista,
+    MIN(genre) AS Género,                     -- toma un género representativo
+    ROUND(AVG(popularity), 2) AS Popularidad_media
+FROM spotipy
+GROUP BY artist
+ORDER BY Popularidad_media DESC
+LIMIT 5;last_fm
+
 
 -- Álbum con más canciones registradas en la tabla -- Spotipy
 SELECT album, artist, COUNT(track) AS total_canciones

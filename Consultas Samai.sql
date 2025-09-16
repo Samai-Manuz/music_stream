@@ -71,7 +71,7 @@ Por lo que tendríamos que tener en cuenta esto último, de cara a la presentaci
 /* Como ya sé que tenemos el problema del duplicado en metal, que justo afecta a los índices más altos, le meto un limit 5 para seguir viendo 3, tras descartar ese duplicado */
 
 -- Top 5 de jazz
-SELECT 'jazz' AS genre, track, artist, album, popularity
+SELECT 'jazz' AS genre, track, artist,  popularity
 FROM spotipy
 WHERE genre = 'jazz'
 ORDER BY popularity DESC, track ASC
@@ -79,25 +79,30 @@ LIMIT 5;  /* Aquí veo que "Hit the Road Jack", de Ray Charles, también aparece
 porque está en 2 albums diferentes, con dos registros de popularidad (73 y 68) diferentes */
 
 -- Top 5 de blues
-SELECT 'blues' AS genre, track, artist, album, popularity
+SELECT 'blues' AS genre, track, artist,  popularity
 FROM spotipy
 WHERE genre = 'blues'
 ORDER BY popularity DESC, track ASC
 LIMIT 5;
 
 -- Top 5 de metal
-SELECT 'metal' AS genre, track, artist, album, popularity
+SELECT 'metal' AS genre, track, artist,  popularity
 FROM spotipy
 WHERE genre = 'metal'
 ORDER BY popularity DESC, track ASC
 LIMIT 5;
 
 -- Top 5 de rap
-SELECT 'rap' AS genre, track, artist, album, popularity
+SELECT DISTINCT
+    'rap' AS genre,
+    track,
+    artist,
+    album,
+    popularity
 FROM spotipy
 WHERE genre = 'rap'
-ORDER BY popularity DESC, track ASC
-LIMIT 5; /* Veo que el género rap no tiene cargado el índice de popularidad en la API, por lo que va a ser un reto contrastarlo con los demás géneros */
+ORDER BY popularity
+LIMIT 10; /* Veo que el género rap no tiene cargado el índice de popularidad en la API, por lo que va a ser un reto contrastarlo con los demás géneros */
 
 -- 4. Número total de reproducciones por artista y género - Last fm
 /* Separo la consulta porque veo un poco absurdo el consultar por artista, habiendo 500 por género, sin acotar el resultado con algún limit */
@@ -123,6 +128,16 @@ ORDER BY total_reproducciones DESC;
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- CONSULTAS EXTRA --
 
-
+SELECT
+    l.artist AS Artists,
+    l.genre as Género,
+    l.listeners AS Oyentes_Únicos,
+    l.playcount AS Total_Reproducciones,
+    AVG(s.popularity) AS Popularidad
+FROM last_fm l
+LEFT JOIN spotipy s
+       ON l.artist = s.artist
+WHERE l.artist IN ('Kanye West', 'Linkin Park')
+GROUP BY l.artist, l.genre, l.listeners, l.playcount;
 
 
