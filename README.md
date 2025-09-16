@@ -1,7 +1,7 @@
 # 🎧🔥 Proyecto SQL: Music Stream en Clave Urbana
 
 **Bootcamp Data Analytics – Módulo 2**  
-**Equipo:** Samai · Ela · Ziusanna · Ángela  
+**Equipo:** Samai · Ela · Siuzanna · Ángela  
 **Tecnologías:** 🖥️ MySQL Workbench · 🐍 Python · 💻 VS Code · 🎨 Canva  
 
 ---
@@ -19,11 +19,10 @@ quién manda en los géneros, qué artistas revientan el conteo y cómo evolucio
 2️⃣ Número de oyentes únicos por género  
 3️⃣ Reproducciones totales por artista y género  
 4️⃣ Álbumes más populares por año  
-5️⃣ Canciones más populares de cada artista  
-6️⃣ Artistas con más popularidad global  
-7️⃣ Las 3 canciones más populares en total  
-8️⃣ Artistas con mayor popularidad media y al menos 3 años de presencia  
-9️⃣ Top 5 artistas más populares en promedio  
+5️⃣ Artistas con más popularidad global 
+6️⃣ Artistas con mayor popularidad media y al menos 3 años de presencia  
+7️⃣ Metal -VS- Rap. Comparativa de sus artistas top  
+8️⃣ Las 3 canciones más populares en total
 
 ---
 
@@ -37,13 +36,12 @@ quién manda en los géneros, qué artistas revientan el conteo y cómo evolucio
 
 ## 📊 Resultados destacados
 - 🎤 Rap se lleva el 46% de oyentes, dejando claro quién manda en la calle.  
-- 🎸 Metallica rompe esquemas: 83 de popularidad y un 2021 que fue su año dorado.  
-- 🧑‍🎤 Kanye West lidera en oyentes, pero en reproducciones BTS da el golpe.  
+- 🎸 2021 que fue el año dorado para Metallica.  
+- 🔝 Kanye West lidera en oyentes, pero en reproducciones BTS da el golpe.  
 - 🥁 Linkin Park se cuela en el top 10, representando al Metal en un mundo dominado por el Rap.  
-- 🎶 Canciones más populares: el Metal sorprende con *Enter Sandman* y *Numb* al frente.  
-- 📀 Álbumes: *Metallica 2021* en la cima, años posteriores estables (74–80 puntos).  
+- 📀 El Blues y el Jazz se reivindican como clásicos del underground en términos de popularidad global.  
 - ⭐ Consistencia: *Bring Me The Horizon* y *Falling in Reverse* mantienen el ritmo estable durante al menos 3 años.  
-- 🔝 Top 5: colaboraciones como *Bring Me The Horizon & BABYMETAL* superan en promedio a artistas individuales.  
+- 🔇La oscura sospecha del silenciamiento del Rap en Spotify, se confirma.  
 
 ---
 
@@ -59,7 +57,7 @@ quién manda en los géneros, qué artistas revientan el conteo y cómo evolucio
 
 ## 🚀 Conclusiones
 - El Rap domina en oyentes, pero está subrepresentado en métricas de popularidad → sesgo en plataformas.  
-- El Metal aparece fuerte en canciones y álbumes icónicos.  
+- El Metal aparece fuerte en canciones, artistas y álbumes icónicos, allí donde se silencia al Rap.  
 - Contrastar Spotify + Last.fm permitió reducir la dependencia de una sola fuente.  
 - Los datos reflejan que la industria legitima ciertos géneros (Metal/Jazz) mientras otros (Rap) quedan invisibilizados.  
 
@@ -74,7 +72,7 @@ quién manda en los géneros, qué artistas revientan el conteo y cómo evolucio
 ---
 
 ## ✍️ Autoras
-👩‍💻 Samai · 👩‍💻 Ela · 👩‍💻 Ziusanna · 👩‍💻 Ángela  
+👩‍💻 Samai · 👩‍💻 Ela · 👩‍💻 Siuzanna · 👩‍💻 Ángela  
 Bootcamp Data Analytics – Adalab · Septiembre 2025  
 
 ---
